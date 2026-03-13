@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>.</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Instrument+Serif:ital@0;1&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+  html::-webkit-scrollbar { display: none; }
+
+  body {
+    background: #090909;
+    color: #e8e8e8;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ── Sections ── */
+  section {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+  }
+
+  /* ── Section 1 ── */
+  #s1 .line {
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    font-size: clamp(1.4rem, 5vw, 2.8rem);
+    color: #555;
+    text-align: center;
+    line-height: 1.9;
+    opacity: 0;
+    transform: translateY(25px);
+    transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  #s1 .line.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  #s1 .line:last-child {
+    color: #888;
+  }
+
+  .scroll-line {
+    position: absolute;
+    bottom: 3rem;
+    width: 1px;
+    height: 50px;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeIn 1s ease 3s forwards;
+  }
+  .scroll-line::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(to bottom, #333, transparent);
+    animation: scrollDrop 2s ease-in-out infinite;
+  }
+
+  /* ── Section 2 ── */
+  #s2 {
+    background: #090909;
+  }
+  #s2 .text-wrap {
+    text-align: center;
+    overflow: hidden;
+  }
+  #s2 .big {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(2.8rem, 10vw, 7rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  #s2 .big.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  #s2 .big span {
+    display: block;
+  }
+  #s2 .big .accent {
+    background: linear-gradient(90deg, #fff 0%, #999 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Section Countdown ── */
+  #countdown {
+    background: #090909;
+  }
+  .cd-wrap {
+    text-align: center;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .cd-wrap.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .cd-grid {
+    display: flex;
+    gap: clamp(1.5rem, 5vw, 3.5rem);
+    align-items: flex-end;
+  }
+  .cd-block {
+    text-align: center;
+  }
+  .cd-num {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(3rem, 12vw, 8rem);
+    line-height: 1;
+    color: #fff;
+    letter-spacing: -0.03em;
+    min-width: 1.2em;
+    display: block;
+  }
+  .cd-block:first-child .cd-num {
+    font-size: clamp(4rem, 16vw, 11rem);
+  }
+  .cd-unit {
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+    color: #333;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 0.8rem;
+    display: block;
+  }
+  .cd-sep {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2rem, 6vw, 4rem);
+    color: #222;
+    padding-bottom: 1.5rem;
+  }
+  .cd-sub {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+    color: #666;
+    margin-top: 2rem;
+    opacity: 0;
+    transition: opacity 1s ease 0.6s;
+  }
+  .cd-wrap.visible .cd-sub {
+    opacity: 1;
+  }
+
+  /* ── Section 3: Envelope ── */
+  #s3 {
+    background: #090909;
+  }
+
+  .envelope-wrap {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .envelope-wrap.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .envelope-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    font-size: 0.8rem;
+    color: #333;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .envelope {
+    width: clamp(220px, 50vw, 300px);
+    aspect-ratio: 1.5 / 1;
+    position: relative;
+    cursor: pointer;
+    perspective: 600px;
+  }
+
+  /* Envelope body */
+  .env-body {
+    position: absolute;
+    inset: 0;
+    background: #151515;
+    border: 1px solid #222;
+    border-radius: 4px;
+    z-index: 1;
+    transition: border-color 0.4s ease;
+  }
+  .envelope:hover .env-body {
+    border-color: #333;
+  }
+
+  /* Flap (triangle) */
+  .env-flap {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 50%;
+    z-index: 3;
+    transform-origin: top center;
+    transform: rotateX(0deg);
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .env-flap svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Letter paper peeking inside */
+  .env-paper {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    bottom: 8%;
+    top: 20%;
+    background: #1a1a1a;
+    border: 1px solid #1f1f1f;
+    border-radius: 2px;
+    z-index: 2;
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.2s, opacity 0.5s ease 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .env-paper-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+  }
+  .env-paper-lines span {
+    display: block;
+    height: 1px;
+    background: #282828;
+    border-radius: 1px;
+  }
+  .env-paper-lines span:nth-child(1) { width: 50px; }
+  .env-paper-lines span:nth-child(2) { width: 35px; }
+  .env-paper-lines span:nth-child(3) { width: 42px; }
+
+  /* Opened state */
+  .envelope.opened .env-flap {
+    transform: rotateX(180deg);
+  }
+  .envelope.opened .env-paper {
+    transform: translateY(-85%);
+    opacity: 0;
+  }
+
+  /* ── Letter Content (slides up from envelope) ── */
+  .letter-content {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(9, 9, 9, 0);
+    backdrop-filter: blur(0px);
+    pointer-events: none;
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    padding: 1.5rem;
+  }
+  .letter-content.open {
+    background: rgba(9, 9, 9, 0.95);
+    backdrop-filter: blur(30px);
+    pointer-events: all;
+  }
+
+  .letter {
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+  }
+  .letter-content.open .letter {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .letter-close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background: none;
+    border: none;
+    color: #333;
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0.5rem;
+    min-width: 44px;
+    min-height: 44px;
+    transition: color 0.3s ease;
+  }
+  .letter-close:hover { color: #fff; }
+
+  .letter-line {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+    line-height: 1.7;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .letter-spacer {
+    height: 2.5rem;
+  }
+
+  .letter-sign {
+    margin-top: 3rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    font-size: 0.9rem;
+    color: #555;
+    letter-spacing: 0.08em;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+  @keyframes scrollDrop {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
+</style>
+</head>
+<body>
+
+<section id="s1">
+  <div>
+    <div class="line">mir war langweilig</div>
+    <div class="line">scroll einfach runter</div>
+  </div>
+  <div class="scroll-line"></div>
+</section>
+
+<section id="s2">
+  <div class="text-wrap">
+    <div class="big">
+      <span>i genuinely</span>
+      <span class="accent">miss u mommy</span>
+    </div>
+  </div>
+</section>
+
+<section id="countdown">
+  <div class="cd-wrap">
+    <div class="cd-grid">
+      <div class="cd-block">
+        <span class="cd-num" id="cdDays"></span>
+        <span class="cd-unit">days</span>
+      </div>
+      <div class="cd-sep">:</div>
+      <div class="cd-block">
+        <span class="cd-num" id="cdHours"></span>
+        <span class="cd-unit">hrs</span>
+      </div>
+      <div class="cd-sep">:</div>
+      <div class="cd-block">
+        <span class="cd-num" id="cdMins"></span>
+        <span class="cd-unit">min</span>
+      </div>
+      <div class="cd-sep">:</div>
+      <div class="cd-block">
+        <span class="cd-num" id="cdSecs"></span>
+        <span class="cd-unit">sec</span>
+      </div>
+    </div>
+    <div class="cd-sub">till we can make out again</div>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="envelope-wrap">
+    <div class="envelope" id="envelope">
+      <div class="env-body"></div>
+      <div class="env-paper">
+        <div class="env-paper-lines">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="env-flap">
+        <svg viewBox="0 0 300 100" preserveAspectRatio="none">
+          <polygon points="0,0 150,100 300,0" fill="#151515" stroke="#222" stroke-width="1"/>
+        </svg>
+      </div>
+    </div>
+    <div class="envelope-label">tap to open</div>
+  </div>
+</section>
+
+<div class="letter-content" id="letterOverlay">
+  <button class="letter-close" id="closeBtn">close</button>
+  <div class="letter" id="letterContent">
+    <div class="letter-line">ich vermiss dich wirklich mächtig serafina</div>
+    <div class="letter-spacer"></div>
+    <div class="letter-line">kann's wirklich kaum erwarten,</div>
+    <div class="letter-line">dich wiederzusehen</div>
+    <div class="letter-spacer"></div>
+    <div class="letter-line">i really be the luckiest man alive ngl</div>
+    <div class="letter-line">feel kissed tho</div>
+    <div class="letter-sign">- arne</div>
+  </div>
+</div>
+
+<script>
+// ── Scroll-triggered fade in ──
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.35 });
+
+document.querySelectorAll('.big, .cd-wrap, .envelope-wrap').forEach(el => obs.observe(el));
+
+// ── Countdown ──
+const target = new Date('2026-03-23T00:00:00');
+function pad(n) { return n < 10 ? '0' + n : n; }
+function updateCountdown() {
+  const now = new Date();
+  const diff = Math.max(0, target - now);
+  const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const s = Math.floor((diff % (1000 * 60)) / 1000);
+  document.getElementById('cdDays').textContent = d;
+  document.getElementById('cdHours').textContent = pad(h);
+  document.getElementById('cdMins').textContent = pad(m);
+  document.getElementById('cdSecs').textContent = pad(s);
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// Section 1 auto-animate on load
+window.addEventListener('load', () => {
+  document.querySelectorAll('#s1 .line').forEach((line, i) => {
+    setTimeout(() => line.classList.add('visible'), i * 500 + 400);
+  });
+});
+
+// ── Envelope & Letter ──
+const envelope = document.getElementById('envelope');
+const letterOverlay = document.getElementById('letterOverlay');
+const closeBtn = document.getElementById('closeBtn');
+let letterOpen = false;
+
+function openEnvelope() {
+  if (letterOpen) return;
+  letterOpen = true;
+  envelope.classList.add('opened');
+
+  // After flap opens, show letter content
+  setTimeout(() => {
+    letterOverlay.classList.add('open');
+    const lines = document.querySelectorAll('.letter-line, .letter-sign');
+    lines.forEach((l, i) => {
+      setTimeout(() => {
+        l.style.opacity = '1';
+        l.style.transform = 'translateY(0)';
+      }, i * 350 + 300);
+    });
+  }, 700);
+}
+
+function closeLetter() {
+  const lines = document.querySelectorAll('.letter-line, .letter-sign');
+  lines.forEach(l => {
+    l.style.opacity = '0';
+    l.style.transform = 'translateY(12px)';
+  });
+  setTimeout(() => {
+    letterOverlay.classList.remove('open');
+    letterOpen = false;
+  }, 300);
+}
+
+envelope.addEventListener('click', openEnvelope);
+envelope.addEventListener('touchend', (e) => { e.preventDefault(); openEnvelope(); });
+closeBtn.addEventListener('click', closeLetter);
+closeBtn.addEventListener('touchend', (e) => { e.preventDefault(); closeLetter(); });
+letterOverlay.addEventListener('click', (e) => {
+  if (e.target === letterOverlay) closeLetter();
+});
+</script>
+</body>
+</html>
