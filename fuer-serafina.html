@@ -527,6 +527,88 @@
     background-clip: text;
   }
 
+  /* ── Mobile ── */
+  @media (max-width: 480px) {
+    section {
+      padding: 1.5rem;
+      padding-top: max(1.5rem, env(safe-area-inset-top));
+      padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+    }
+
+    #s1 .line {
+      font-size: clamp(1.2rem, 5.5vw, 1.8rem);
+      line-height: 2;
+    }
+
+    #s2 .big {
+      font-size: clamp(2.4rem, 11vw, 4rem);
+    }
+
+    .cd-grid {
+      gap: 0.8rem;
+    }
+    .cd-num {
+      font-size: clamp(2.2rem, 10vw, 3.5rem);
+    }
+    .cd-block:first-child .cd-num {
+      font-size: clamp(2.8rem, 13vw, 5rem);
+    }
+    .cd-sep {
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      padding-bottom: 1rem;
+    }
+    .cd-unit {
+      font-size: 0.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .hold-btn {
+      width: 160px;
+      height: 160px;
+    }
+
+    .scratch-canvas-wrap {
+      width: min(85vw, 340px);
+      height: 120px;
+    }
+
+    .envelope {
+      width: min(70vw, 260px);
+    }
+
+    .letter-content {
+      padding: 1rem;
+      padding-top: max(1rem, env(safe-area-inset-top));
+    }
+    .letter-close {
+      top: max(1rem, env(safe-area-inset-top));
+      right: 1rem;
+      font-size: 0.9rem;
+      min-width: 48px;
+      min-height: 48px;
+    }
+    .letter-line {
+      font-size: clamp(1.3rem, 5vw, 1.8rem);
+      line-height: 1.6;
+    }
+    .letter-spacer {
+      height: 1.5rem;
+    }
+    .letter-sign {
+      margin-top: 2rem;
+    }
+  }
+
+  /* Tap glow for mobile (no hover) */
+  #s2 .big.glow-active {
+    text-shadow: 0 0 40px rgba(255, 45, 85, 0.15), 0 0 80px rgba(255, 45, 85, 0.08);
+  }
+  #s2 .big.glow-active .accent {
+    background: linear-gradient(90deg, #fff 0%, #ff6b8a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
   /* ── Animations ── */
   @keyframes fadeIn {
     to { opacity: 1; }
@@ -663,7 +745,7 @@ const obs = new IntersectionObserver((entries) => {
       e.target.classList.add('visible');
     }
   });
-}, { threshold: 0.35 });
+}, { threshold: window.innerWidth <= 480 ? 0.15 : 0.35 });
 
 document.querySelectorAll('.big, .cd-wrap, .envelope-wrap, .hold-wrap, .scratch-wrap').forEach(el => obs.observe(el));
 
@@ -770,6 +852,19 @@ if (!('ontouchstart' in window)) {
   });
 }
 
+// ── Mobile tap glow on big text ──
+if ('ontouchstart' in window) {
+  const bigText = document.querySelector('#s2 .big');
+  if (bigText) {
+    bigText.addEventListener('touchstart', () => {
+      bigText.classList.add('glow-active');
+    });
+    bigText.addEventListener('touchend', () => {
+      setTimeout(() => bigText.classList.remove('glow-active'), 600);
+    });
+  }
+}
+
 // ── Hold button with vibration ──
 const holdBtn = document.getElementById('holdBtn');
 let holdActive = false;
@@ -828,7 +923,8 @@ function scratch(x, y) {
   if (scratchRevealed) return;
   scratchCtx.globalCompositeOperation = 'destination-out';
   scratchCtx.beginPath();
-  scratchCtx.arc(x, y, 22, 0, Math.PI * 2);
+  const radius = ('ontouchstart' in window) ? 30 : 22;
+  scratchCtx.arc(x, y, radius, 0, Math.PI * 2);
   scratchCtx.fill();
 
   // Check if enough is scratched
