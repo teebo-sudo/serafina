@@ -358,6 +358,175 @@
     transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
+  /* ── Section: Hold Me ── */
+  #holdSection {
+    background: #090909;
+  }
+  .hold-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .hold-wrap.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .hold-btn {
+    width: clamp(140px, 35vw, 180px);
+    height: clamp(140px, 35vw, 180px);
+    border-radius: 50%;
+    border: 1px solid #222;
+    background: #111;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  .hold-btn:hover {
+    border-color: #333;
+  }
+  .hold-btn.active {
+    border-color: #ff2d5520;
+    box-shadow: 0 0 60px rgba(255, 45, 85, 0.15), 0 0 120px rgba(255, 45, 85, 0.05);
+  }
+  .hold-btn .heart-icon {
+    font-size: clamp(2.5rem, 8vw, 3.5rem);
+    transition: transform 0.3s ease;
+    filter: grayscale(1) brightness(0.4);
+  }
+  .hold-btn.active .heart-icon {
+    filter: none;
+    animation: heartbeat 0.6s ease-in-out infinite;
+  }
+  .hold-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    font-size: 0.8rem;
+    color: #333;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: color 0.4s ease;
+  }
+  .hold-btn.active ~ .hold-label {
+    color: #555;
+  }
+  .hold-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 45, 85, 0.2);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .hold-btn.active .hold-pulse {
+    animation: pulseRing 1.2s ease-out infinite;
+  }
+  .hold-btn.active .hold-pulse:nth-child(2) {
+    animation-delay: 0.4s;
+  }
+
+  /* ── Section: Scratch ── */
+  #scratchSection {
+    background: #090909;
+  }
+  .scratch-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .scratch-wrap.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .scratch-canvas-wrap {
+    position: relative;
+    width: clamp(260px, 70vw, 380px);
+    height: clamp(100px, 25vw, 140px);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .scratch-reveal {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #111;
+    border: 1px solid #1a1a1a;
+    border-radius: 8px;
+  }
+  .scratch-reveal-text {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+  }
+  .scratch-canvas-wrap canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: 8px;
+    cursor: crosshair;
+    touch-action: none;
+  }
+  .scratch-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    font-size: 0.8rem;
+    color: #333;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* ── Kiss particles ── */
+  .kiss-particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 999;
+    font-size: 1.4rem;
+    animation: kissFloat 1.5s ease-out forwards;
+    user-select: none;
+  }
+
+  /* ── Cursor hearts (desktop) ── */
+  .cursor-heart {
+    position: fixed;
+    pointer-events: none;
+    z-index: 998;
+    font-size: 0.7rem;
+    opacity: 0.6;
+    animation: cursorHeartFade 0.8s ease-out forwards;
+    user-select: none;
+  }
+
+  /* ── Glow on big text ── */
+  #s2 .big {
+    transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  #s2 .big.visible:hover {
+    text-shadow: 0 0 40px rgba(255, 45, 85, 0.15), 0 0 80px rgba(255, 45, 85, 0.08);
+  }
+  #s2 .big.visible:hover .accent {
+    background: linear-gradient(90deg, #fff 0%, #ff6b8a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
   /* ── Animations ── */
   @keyframes fadeIn {
     to { opacity: 1; }
@@ -365,6 +534,22 @@
   @keyframes scrollDrop {
     0% { transform: translateY(-100%); }
     100% { transform: translateY(100%); }
+  }
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+  @keyframes pulseRing {
+    0% { transform: scale(1); opacity: 0.4; }
+    100% { transform: scale(1.8); opacity: 0; }
+  }
+  @keyframes kissFloat {
+    0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(-120px) scale(0.5) rotate(20deg); }
+  }
+  @keyframes cursorHeartFade {
+    0% { opacity: 0.6; transform: scale(1) translateY(0); }
+    100% { opacity: 0; transform: scale(0.3) translateY(-30px); }
   }
 </style>
 </head>
@@ -414,6 +599,29 @@
   </div>
 </section>
 
+<section id="holdSection">
+  <div class="hold-wrap">
+    <div class="hold-btn" id="holdBtn">
+      <div class="hold-pulse"></div>
+      <div class="hold-pulse"></div>
+      <span class="heart-icon">❤️</span>
+    </div>
+    <div class="hold-label">hold me</div>
+  </div>
+</section>
+
+<section id="scratchSection">
+  <div class="scratch-wrap">
+    <div class="scratch-label">scratch to reveal</div>
+    <div class="scratch-canvas-wrap">
+      <div class="scratch-reveal">
+        <div class="scratch-reveal-text">du bist so unglaublich hot btw</div>
+      </div>
+      <canvas id="scratchCanvas"></canvas>
+    </div>
+  </div>
+</section>
+
 <section id="s3">
   <div class="envelope-wrap">
     <div class="envelope" id="envelope">
@@ -457,7 +665,7 @@ const obs = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.35 });
 
-document.querySelectorAll('.big, .cd-wrap, .envelope-wrap').forEach(el => obs.observe(el));
+document.querySelectorAll('.big, .cd-wrap, .envelope-wrap, .hold-wrap, .scratch-wrap').forEach(el => obs.observe(el));
 
 // ── Countdown ──
 const target = new Date('2026-03-23T00:00:00');
@@ -526,6 +734,136 @@ closeBtn.addEventListener('click', closeLetter);
 closeBtn.addEventListener('touchend', (e) => { e.preventDefault(); closeLetter(); });
 letterOverlay.addEventListener('click', (e) => {
   if (e.target === letterOverlay) closeLetter();
+});
+
+// ── Kiss particles on tap/click ──
+const kisses = ['💋', '😘', '♥'];
+document.addEventListener('click', (e) => {
+  // Don't spawn on interactive elements
+  if (e.target.closest('button, .envelope, .hold-btn, canvas')) return;
+  for (let i = 0; i < 3; i++) {
+    const k = document.createElement('span');
+    k.className = 'kiss-particle';
+    k.textContent = kisses[Math.floor(Math.random() * kisses.length)];
+    k.style.left = (e.clientX + (Math.random() - 0.5) * 40) + 'px';
+    k.style.top = (e.clientY + (Math.random() - 0.5) * 20) + 'px';
+    document.body.appendChild(k);
+    k.addEventListener('animationend', () => k.remove());
+  }
+});
+
+// ── Cursor heart trail (desktop only) ──
+if (!('ontouchstart' in window)) {
+  let lastTrail = 0;
+  document.addEventListener('mousemove', (e) => {
+    const now = Date.now();
+    if (now - lastTrail < 80) return;
+    lastTrail = now;
+    const h = document.createElement('span');
+    h.className = 'cursor-heart';
+    h.textContent = '♥';
+    h.style.left = e.clientX + 'px';
+    h.style.top = e.clientY + 'px';
+    h.style.color = `hsl(${340 + Math.random() * 30}, 80%, ${50 + Math.random() * 20}%)`;
+    document.body.appendChild(h);
+    h.addEventListener('animationend', () => h.remove());
+  });
+}
+
+// ── Hold button with vibration ──
+const holdBtn = document.getElementById('holdBtn');
+let holdActive = false;
+
+function startHold() {
+  holdActive = true;
+  holdBtn.classList.add('active');
+  if (navigator.vibrate) {
+    navigator.vibrate([100, 50, 100, 50, 200, 100, 100, 50, 100, 50, 200]);
+  }
+}
+function stopHold() {
+  holdActive = false;
+  holdBtn.classList.remove('active');
+  if (navigator.vibrate) navigator.vibrate(0);
+}
+
+holdBtn.addEventListener('mousedown', startHold);
+holdBtn.addEventListener('mouseup', stopHold);
+holdBtn.addEventListener('mouseleave', stopHold);
+holdBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startHold(); });
+holdBtn.addEventListener('touchend', (e) => { e.preventDefault(); stopHold(); });
+
+// ── Scratch canvas ──
+const scratchCanvas = document.getElementById('scratchCanvas');
+const scratchCtx = scratchCanvas.getContext('2d');
+let scratching = false;
+let scratchRevealed = false;
+
+function initScratch() {
+  const wrap = scratchCanvas.parentElement;
+  scratchCanvas.width = wrap.offsetWidth;
+  scratchCanvas.height = wrap.offsetHeight;
+  const ctx = scratchCtx;
+
+  // Draw the cover
+  ctx.fillStyle = '#1a1a1a';
+  ctx.fillRect(0, 0, scratchCanvas.width, scratchCanvas.height);
+
+  // Add subtle pattern
+  ctx.fillStyle = '#222';
+  ctx.font = '12px Inter';
+  ctx.textAlign = 'center';
+  for (let y = 20; y < scratchCanvas.height; y += 25) {
+    for (let x = 30; x < scratchCanvas.width; x += 60) {
+      ctx.fillText('✦', x + (y % 50 ? 15 : 0), y);
+    }
+  }
+
+  ctx.strokeStyle = '#333';
+  ctx.lineWidth = 0.5;
+  ctx.strokeRect(0, 0, scratchCanvas.width, scratchCanvas.height);
+}
+
+function scratch(x, y) {
+  if (scratchRevealed) return;
+  scratchCtx.globalCompositeOperation = 'destination-out';
+  scratchCtx.beginPath();
+  scratchCtx.arc(x, y, 22, 0, Math.PI * 2);
+  scratchCtx.fill();
+
+  // Check if enough is scratched
+  const data = scratchCtx.getImageData(0, 0, scratchCanvas.width, scratchCanvas.height).data;
+  let clear = 0;
+  for (let i = 3; i < data.length; i += 4) {
+    if (data[i] === 0) clear++;
+  }
+  if (clear / (data.length / 4) > 0.45) {
+    scratchRevealed = true;
+    scratchCanvas.style.transition = 'opacity 0.5s ease';
+    scratchCanvas.style.opacity = '0';
+  }
+}
+
+function getScratchPos(e) {
+  const rect = scratchCanvas.getBoundingClientRect();
+  const t = e.touches ? e.touches[0] : e;
+  return { x: t.clientX - rect.left, y: t.clientY - rect.top };
+}
+
+scratchCanvas.addEventListener('mousedown', () => scratching = true);
+scratchCanvas.addEventListener('mouseup', () => scratching = false);
+scratchCanvas.addEventListener('mousemove', (e) => { if (scratching) { const p = getScratchPos(e); scratch(p.x, p.y); } });
+scratchCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); scratching = true; });
+scratchCanvas.addEventListener('touchend', () => scratching = false);
+scratchCanvas.addEventListener('touchmove', (e) => { e.preventDefault(); const p = getScratchPos(e); scratch(p.x, p.y); });
+
+// Init scratch on load
+window.addEventListener('load', () => {
+  initScratch();
+});
+// Re-init on resize
+window.addEventListener('resize', () => {
+  if (!scratchRevealed) initScratch();
 });
 </script>
 </body>
