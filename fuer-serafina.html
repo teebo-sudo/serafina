@@ -494,16 +494,6 @@
     transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  /* ── Kiss particles ── */
-  .kiss-particle {
-    position: fixed;
-    pointer-events: none;
-    z-index: 999;
-    font-size: 1.4rem;
-    animation: kissFloat 1.5s ease-out forwards;
-    user-select: none;
-  }
-
   /* ── Cursor hearts (desktop) ── */
   .cursor-heart {
     position: fixed;
@@ -555,11 +545,7 @@
     0% { transform: scale(1); opacity: 0.4; }
     100% { transform: scale(1.8); opacity: 0; }
   }
-  @keyframes kissFloat {
-    0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
-    100% { opacity: 0; transform: translateY(-120px) scale(0.5) rotate(20deg); }
-  }
-  @keyframes cursorHeartFade {
+@keyframes cursorHeartFade {
     0% { opacity: 0.6; transform: scale(1) translateY(0); }
     100% { opacity: 0; transform: scale(0.3) translateY(-30px); }
   }
@@ -914,21 +900,6 @@ envelope.addEventListener('touchend', (e) => { e.preventDefault(); openEnvelope(
 closeBtn.addEventListener('click', closeLetter);
 closeBtn.addEventListener('touchend', (e) => { e.preventDefault(); closeLetter(); });
 letterOverlay.addEventListener('click', (e) => { if (e.target === letterOverlay) closeLetter(); });
-
-// ── Kiss particles ──
-const kisses = ['\u{1F48B}', '\u{1F618}', '\u2665'];
-document.addEventListener('click', (e) => {
-  if (e.target.closest('button, .envelope, .hold-btn, canvas, .side-nav, .song-play')) return;
-  for (let i = 0; i < 3; i++) {
-    const k = document.createElement('span');
-    k.className = 'kiss-particle';
-    k.textContent = kisses[Math.floor(Math.random() * kisses.length)];
-    k.style.left = (e.clientX + (Math.random() - 0.5) * 40) + 'px';
-    k.style.top = (e.clientY + (Math.random() - 0.5) * 20) + 'px';
-    document.body.appendChild(k);
-    k.addEventListener('animationend', () => k.remove());
-  }
-});
 
 // ── Cursor heart trail (desktop) ──
 if (!('ontouchstart' in window)) {
