@@ -198,72 +198,6 @@
   }
   .cd-wrap.visible .cd-sub { opacity: 1; }
 
-  /* ── Section: Song ── */
-  #songSection { min-height: 60vh; }
-  .song-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.8rem;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .song-wrap.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .song-label {
-    font-family: 'Inter', sans-serif;
-    font-weight: 200;
-    font-size: 0.8rem;
-    color: #333;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-  }
-  .song-info {
-    text-align: center;
-  }
-  .song-title {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic;
-    font-size: clamp(1.6rem, 4vw, 2.2rem);
-    color: #fff;
-    margin-bottom: 0.4rem;
-  }
-  .song-artist {
-    font-family: 'Inter', sans-serif;
-    font-weight: 200;
-    font-size: 0.85rem;
-    color: #555;
-    letter-spacing: 0.05em;
-  }
-  .song-play {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    border: 1px solid #222;
-    background: #111;
-    cursor: pointer;
-    transition: all 0.4s ease;
-    text-decoration: none;
-  }
-  .song-play:hover {
-    border-color: #1DB954;
-    box-shadow: 0 0 30px rgba(29, 185, 84, 0.15);
-  }
-  .song-play svg {
-    width: 20px;
-    height: 20px;
-    fill: #888;
-    margin-left: 2px;
-    transition: fill 0.3s ease;
-  }
-  .song-play:hover svg { fill: #1DB954; }
-
   /* ── Section: Hold Me ── */
   .hold-wrap {
     display: flex;
@@ -644,7 +578,6 @@
   <a href="#s1" data-section="s1"></a>
   <a href="#s2" data-section="s2"></a>
   <a href="#countdown" data-section="countdown"></a>
-  <a href="#songSection" data-section="songSection"></a>
   <a href="#holdSection" data-section="holdSection"></a>
   <a href="#scratchSection" data-section="scratchSection"></a>
   <a href="#s3" data-section="s3"></a>
@@ -692,19 +625,6 @@
       </div>
     </div>
     <div class="cd-sub">till we finally can make out again</div>
-  </div>
-</section>
-
-<section id="songSection">
-  <div class="song-wrap">
-    <div class="song-label">our song</div>
-    <div class="song-info">
-      <div class="song-title">He a Keeper</div>
-      <div class="song-artist">Reignwolf</div>
-    </div>
-    <a class="song-play" href="https://open.spotify.com/search/He%20a%20Keeper%20Reignwolf" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>
-    </a>
   </div>
 </section>
 
@@ -838,7 +758,7 @@ const obs = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold });
 
-document.querySelectorAll('.big, .cd-wrap, .envelope-wrap, .hold-wrap, .scratch-wrap, .song-wrap').forEach(el => obs.observe(el));
+document.querySelectorAll('.big, .cd-wrap, .envelope-wrap, .hold-wrap, .scratch-wrap').forEach(el => obs.observe(el));
 
 // ── Scroll-based progressive glow ──
 const accentEls = document.querySelectorAll('#s2 .big .accent');
