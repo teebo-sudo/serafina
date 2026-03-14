@@ -529,15 +529,15 @@
     user-select: none;
   }
 
-  /* ── Glow on big text ── */
-  #s2 .big {
-    transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  /* ── Scroll glow on big text ── */
+  #s2 .big .accent {
+    transition: all 0.8s ease;
   }
-  #s2 .big.visible:hover {
-    text-shadow: 0 0 40px rgba(255, 45, 85, 0.15), 0 0 80px rgba(255, 45, 85, 0.08);
+  #s2 .big.scroll-glow {
+    text-shadow: 0 0 40px rgba(255, 45, 85, 0.2), 0 0 80px rgba(255, 45, 85, 0.1);
   }
-  #s2 .big.visible:hover .accent {
-    background: linear-gradient(90deg, #fff 0%, #ff6b8a 100%);
+  #s2 .big.scroll-glow .accent {
+    background: linear-gradient(90deg, #fff 0%, #ff4d6d 100%);
     -webkit-background-clip: text;
     background-clip: text;
   }
@@ -612,16 +612,6 @@
     .letter-sign {
       margin-top: 2rem;
     }
-  }
-
-  /* Tap glow for mobile (no hover) */
-  #s2 .big.glow-active {
-    text-shadow: 0 0 40px rgba(255, 45, 85, 0.15), 0 0 80px rgba(255, 45, 85, 0.08);
-  }
-  #s2 .big.glow-active .accent {
-    background: linear-gradient(90deg, #fff 0%, #ff6b8a 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
   }
 
   /* ── Animations ── */
@@ -868,17 +858,17 @@ if (!('ontouchstart' in window)) {
   });
 }
 
-// ── Mobile tap glow on big text ──
-if ('ontouchstart' in window) {
-  const bigText = document.querySelector('#s2 .big');
-  if (bigText) {
-    bigText.addEventListener('touchstart', () => {
-      bigText.classList.add('glow-active');
+// ── Scroll-based glow on "miss u mommy" ──
+const bigText = document.querySelector('#s2 .big');
+if (bigText) {
+  const glowObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting && e.intersectionRatio > 0.6) {
+        bigText.classList.add('scroll-glow');
+      }
     });
-    bigText.addEventListener('touchend', () => {
-      setTimeout(() => bigText.classList.remove('glow-active'), 600);
-    });
-  }
+  }, { threshold: [0, 0.3, 0.6, 1] });
+  glowObs.observe(bigText);
 }
 
 // ── Hold button with vibration ──
