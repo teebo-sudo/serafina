@@ -817,15 +817,14 @@ const obs = new IntersectionObserver((entries) => {
 document.querySelectorAll('.big, .cd-wrap, .envelope-wrap, .hold-wrap, .scratch-wrap').forEach(el => obs.observe(el));
 
 // ── Scroll-based progressive glow on accent text ──
-const accentEl = document.querySelector('#s2 .big .accent');
+const accentEls = document.querySelectorAll('#s2 .big .accent');
 const s2Section = document.getElementById('s2');
 
 function updateGlow() {
-  if (!accentEl || !s2Section) return;
+  if (!accentEls.length || !s2Section) return;
   const rect = s2Section.getBoundingClientRect();
   const winH = window.innerHeight;
 
-  // Progress: 0 when section enters viewport, 1 when section center is at viewport center
   const sectionCenter = rect.top + rect.height / 2;
   const viewCenter = winH / 2;
   const distance = Math.abs(sectionCenter - viewCenter);
@@ -836,12 +835,16 @@ function updateGlow() {
   const r = Math.round(153 + (255 - 153) * progress);
   const g = Math.round(153 + (77 - 153) * progress);
   const b = Math.round(153 + (109 - 153) * progress);
-  accentEl.style.background = `linear-gradient(90deg, #fff 0%, rgb(${r},${g},${b}) 100%)`;
-  accentEl.style.webkitBackgroundClip = 'text';
-  accentEl.style.backgroundClip = 'text';
+  const grad = `linear-gradient(90deg, #fff 0%, rgb(${r},${g},${b}) 100%)`;
+
+  accentEls.forEach(el => {
+    el.style.background = grad;
+    el.style.webkitBackgroundClip = 'text';
+    el.style.backgroundClip = 'text';
+  });
 
   // Text shadow glow
-  const bigEl = accentEl.parentElement;
+  const bigEl = accentEls[0].parentElement;
   if (bigEl) {
     const glowOpacity = progress * 0.25;
     bigEl.style.textShadow = progress > 0.1
