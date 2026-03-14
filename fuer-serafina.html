@@ -23,6 +23,34 @@
     -webkit-tap-highlight-color: transparent;
   }
 
+  /* ── Side Nav ── */
+  .side-nav {
+    position: fixed;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .side-nav.visible { opacity: 1; }
+  .side-nav a {
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #333;
+    transition: all 0.4s ease;
+    text-decoration: none;
+  }
+  .side-nav a.active {
+    background: #fff;
+    transform: scale(1.4);
+  }
+
   /* ── Sections ── */
   section {
     min-height: 100vh;
@@ -90,7 +118,7 @@
     color: #fff;
     opacity: 0;
     transform: translateY(40px);
-    transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1), transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
   }
   #s2 .big.visible {
     opacity: 1;
@@ -100,10 +128,10 @@
     display: block;
   }
   #s2 .big .accent {
-    background: linear-gradient(90deg, #fff 0%, #999 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    transition: background 0.05s linear;
   }
 
   /* ── Section Countdown ── */
@@ -168,194 +196,6 @@
   }
   .cd-wrap.visible .cd-sub {
     opacity: 1;
-  }
-
-  /* ── Section 3: Envelope ── */
-  #s3 {
-    background: #090909;
-  }
-
-  .envelope-wrap {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-  }
-  .envelope-wrap.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .envelope-label {
-    font-family: 'Inter', sans-serif;
-    font-weight: 200;
-    font-size: 0.8rem;
-    color: #333;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-  }
-
-  .envelope {
-    width: clamp(220px, 50vw, 300px);
-    aspect-ratio: 1.5 / 1;
-    position: relative;
-    cursor: pointer;
-    perspective: 600px;
-  }
-
-  /* Envelope body */
-  .env-body {
-    position: absolute;
-    inset: 0;
-    background: #151515;
-    border: 1px solid #222;
-    border-radius: 4px;
-    z-index: 1;
-    transition: border-color 0.4s ease;
-  }
-  .envelope:hover .env-body {
-    border-color: #333;
-  }
-
-  /* Flap (triangle) */
-  .env-flap {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 50%;
-    z-index: 3;
-    transform-origin: top center;
-    transform: rotateX(0deg);
-    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .env-flap svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-  }
-
-  /* Letter paper peeking inside */
-  .env-paper {
-    position: absolute;
-    left: 8%;
-    right: 8%;
-    bottom: 8%;
-    top: 20%;
-    background: #1a1a1a;
-    border: 1px solid #1f1f1f;
-    border-radius: 2px;
-    z-index: 2;
-    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.2s, opacity 0.5s ease 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .env-paper-lines {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    align-items: center;
-  }
-  .env-paper-lines span {
-    display: block;
-    height: 1px;
-    background: #282828;
-    border-radius: 1px;
-  }
-  .env-paper-lines span:nth-child(1) { width: 50px; }
-  .env-paper-lines span:nth-child(2) { width: 35px; }
-  .env-paper-lines span:nth-child(3) { width: 42px; }
-
-  /* Opened state */
-  .envelope.opened .env-flap {
-    transform: rotateX(180deg);
-  }
-  .envelope.opened .env-paper {
-    transform: translateY(-85%);
-    opacity: 0;
-  }
-
-  /* ── Letter Content (slides up from envelope) ── */
-  .letter-content {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(9, 9, 9, 0);
-    backdrop-filter: blur(0px);
-    pointer-events: none;
-    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-    padding: 1.5rem;
-  }
-  .letter-content.open {
-    background: rgba(9, 9, 9, 0.95);
-    backdrop-filter: blur(30px);
-    pointer-events: all;
-  }
-
-  .letter {
-    max-width: 520px;
-    width: 100%;
-    text-align: center;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
-  }
-  .letter-content.open .letter {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .letter-close {
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
-    background: none;
-    border: none;
-    color: #333;
-    font-family: 'Inter', sans-serif;
-    font-weight: 200;
-    font-size: 0.8rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    cursor: pointer;
-    padding: 0.5rem;
-    min-width: 44px;
-    min-height: 44px;
-    transition: color 0.3s ease;
-  }
-  .letter-close:hover { color: #fff; }
-
-  .letter-line {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic;
-    font-size: clamp(1.6rem, 4.5vw, 2.4rem);
-    line-height: 1.7;
-    color: #fff;
-    opacity: 0;
-    transform: translateY(12px);
-    transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .letter-spacer {
-    height: 2.5rem;
-  }
-
-  .letter-sign {
-    margin-top: 3rem;
-    font-family: 'Inter', sans-serif;
-    font-weight: 200;
-    font-size: 0.9rem;
-    color: #555;
-    letter-spacing: 0.08em;
-    text-align: center;
-    opacity: 0;
-    transform: translateY(12px);
-    transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   /* ── Section: Hold Me ── */
@@ -508,6 +348,187 @@
     text-transform: uppercase;
   }
 
+  /* ── Section 3: Envelope ── */
+  #s3 {
+    background: #090909;
+  }
+
+  .envelope-wrap {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .envelope-wrap.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .envelope-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    font-size: 0.8rem;
+    color: #333;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .envelope {
+    width: clamp(220px, 50vw, 300px);
+    aspect-ratio: 1.5 / 1;
+    position: relative;
+    cursor: pointer;
+    perspective: 600px;
+  }
+
+  .env-body {
+    position: absolute;
+    inset: 0;
+    background: #151515;
+    border: 1px solid #222;
+    border-radius: 4px;
+    z-index: 1;
+    transition: border-color 0.4s ease;
+  }
+  .envelope:hover .env-body {
+    border-color: #333;
+  }
+
+  .env-flap {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 50%;
+    z-index: 3;
+    transform-origin: top center;
+    transform: rotateX(0deg);
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .env-flap svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .env-paper {
+    position: absolute;
+    left: 8%; right: 8%; bottom: 8%; top: 20%;
+    background: #1a1a1a;
+    border: 1px solid #1f1f1f;
+    border-radius: 2px;
+    z-index: 2;
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.2s, opacity 0.5s ease 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .env-paper-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+  }
+  .env-paper-lines span {
+    display: block;
+    height: 1px;
+    background: #282828;
+    border-radius: 1px;
+  }
+  .env-paper-lines span:nth-child(1) { width: 50px; }
+  .env-paper-lines span:nth-child(2) { width: 35px; }
+  .env-paper-lines span:nth-child(3) { width: 42px; }
+
+  .envelope.opened .env-flap {
+    transform: rotateX(180deg);
+  }
+  .envelope.opened .env-paper {
+    transform: translateY(-85%);
+    opacity: 0;
+  }
+
+  /* ── Letter Overlay ── */
+  .letter-content {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(9, 9, 9, 0);
+    backdrop-filter: blur(0px);
+    pointer-events: none;
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    padding: 1.5rem;
+  }
+  .letter-content.open {
+    background: rgba(9, 9, 9, 0.95);
+    backdrop-filter: blur(30px);
+    pointer-events: all;
+  }
+
+  .letter {
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+  }
+  .letter-content.open .letter {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .letter-close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background: none;
+    border: none;
+    color: #333;
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0.5rem;
+    min-width: 44px;
+    min-height: 44px;
+    transition: color 0.3s ease;
+  }
+  .letter-close:hover { color: #fff; }
+
+  .letter-line {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+    line-height: 1.7;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .letter-spacer {
+    height: 2.5rem;
+  }
+
+  .letter-sign {
+    margin-top: 3rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    font-size: 0.9rem;
+    color: #555;
+    letter-spacing: 0.08em;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
   /* ── Kiss particles ── */
   .kiss-particle {
     position: fixed;
@@ -529,25 +550,21 @@
     user-select: none;
   }
 
-  /* ── Scroll glow on big text ── */
-  #s2 .big .accent {
-    transition: all 0.8s ease;
-  }
-  #s2 .big.scroll-glow {
-    text-shadow: 0 0 40px rgba(255, 45, 85, 0.2), 0 0 80px rgba(255, 45, 85, 0.1);
-  }
-  #s2 .big.scroll-glow .accent {
-    background: linear-gradient(90deg, #fff 0%, #ff4d6d 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-  }
-
   /* ── Mobile ── */
   @media (max-width: 480px) {
     section {
       padding: 1.5rem;
       padding-top: max(1.5rem, env(safe-area-inset-top));
       padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+    }
+
+    .side-nav {
+      right: 0.8rem;
+      gap: 10px;
+    }
+    .side-nav a {
+      width: 5px;
+      height: 5px;
     }
 
     #s1 .line {
@@ -642,10 +659,20 @@
 </head>
 <body>
 
+<!-- Side Navigation -->
+<nav class="side-nav" id="sideNav">
+  <a href="#s1" data-section="s1"></a>
+  <a href="#s2" data-section="s2"></a>
+  <a href="#countdown" data-section="countdown"></a>
+  <a href="#holdSection" data-section="holdSection"></a>
+  <a href="#scratchSection" data-section="scratchSection"></a>
+  <a href="#s3" data-section="s3"></a>
+</nav>
+
 <section id="s1">
   <div>
-    <div class="line">mir war langweilig</div>
-    <div class="line">scroll einfach runter</div>
+    <div class="line">i got bored</div>
+    <div class="line">just scroll down</div>
   </div>
   <div class="scroll-line"></div>
 </section>
@@ -654,7 +681,7 @@
   <div class="text-wrap">
     <div class="big">
       <span>i genuinely</span>
-      <span class="accent">miss u mommy</span>
+      <span class="accent">miss you so bad</span>
     </div>
   </div>
 </section>
@@ -682,7 +709,7 @@
         <span class="cd-unit">sec</span>
       </div>
     </div>
-    <div class="cd-sub">till we can make out again</div>
+    <div class="cd-sub">till i get to kiss you again</div>
   </div>
 </section>
 
@@ -732,28 +759,103 @@
 <div class="letter-content" id="letterOverlay">
   <button class="letter-close" id="closeBtn">close</button>
   <div class="letter" id="letterContent">
-    <div class="letter-line">ich vermiss dich wirklich mächtig serafina</div>
+    <div class="letter-line">ich vermiss dich so sehr serafina</div>
     <div class="letter-spacer"></div>
-    <div class="letter-line">kann's wirklich kaum erwarten,</div>
+    <div class="letter-line">kann echt kaum erwarten</div>
     <div class="letter-line">dich wiederzusehen</div>
     <div class="letter-spacer"></div>
-    <div class="letter-line">i really be the luckiest man alive ngl</div>
+    <div class="letter-line">i swear im the luckiest man alive</div>
     <div class="letter-line">feel kissed tho</div>
     <div class="letter-sign">- arne</div>
   </div>
 </div>
 
 <script>
+// ── Side nav ──
+const sideNav = document.getElementById('sideNav');
+const sections = document.querySelectorAll('section');
+const navLinks = sideNav.querySelectorAll('a');
+let navVisible = false;
+
+function updateNav() {
+  const scrollY = window.scrollY;
+  const winH = window.innerHeight;
+
+  // Show nav after scrolling past first section
+  if (scrollY > winH * 0.3 && !navVisible) {
+    sideNav.classList.add('visible');
+    navVisible = true;
+  } else if (scrollY <= winH * 0.3 && navVisible) {
+    sideNav.classList.remove('visible');
+    navVisible = false;
+  }
+
+  // Highlight active section
+  let current = '';
+  sections.forEach(s => {
+    const top = s.offsetTop;
+    if (scrollY >= top - winH * 0.5) {
+      current = s.id;
+    }
+  });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.dataset.section === current);
+  });
+}
+
 // ── Scroll-triggered fade in ──
+const threshold = window.innerWidth <= 480 ? 0.15 : 0.35;
 const obs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
       e.target.classList.add('visible');
     }
   });
-}, { threshold: window.innerWidth <= 480 ? 0.15 : 0.35 });
+}, { threshold });
 
 document.querySelectorAll('.big, .cd-wrap, .envelope-wrap, .hold-wrap, .scratch-wrap').forEach(el => obs.observe(el));
+
+// ── Scroll-based progressive glow on accent text ──
+const accentEl = document.querySelector('#s2 .big .accent');
+const s2Section = document.getElementById('s2');
+
+function updateGlow() {
+  if (!accentEl || !s2Section) return;
+  const rect = s2Section.getBoundingClientRect();
+  const winH = window.innerHeight;
+
+  // Progress: 0 when section enters viewport, 1 when section center is at viewport center
+  const sectionCenter = rect.top + rect.height / 2;
+  const viewCenter = winH / 2;
+  const distance = Math.abs(sectionCenter - viewCenter);
+  const maxDist = winH;
+  const progress = Math.max(0, Math.min(1, 1 - distance / maxDist));
+
+  // Interpolate from grey (#999) to red (#ff4d6d)
+  const r = Math.round(153 + (255 - 153) * progress);
+  const g = Math.round(153 + (77 - 153) * progress);
+  const b = Math.round(153 + (109 - 153) * progress);
+  accentEl.style.background = `linear-gradient(90deg, #fff 0%, rgb(${r},${g},${b}) 100%)`;
+  accentEl.style.webkitBackgroundClip = 'text';
+  accentEl.style.backgroundClip = 'text';
+
+  // Text shadow glow
+  const bigEl = accentEl.parentElement;
+  if (bigEl) {
+    const glowOpacity = progress * 0.25;
+    bigEl.style.textShadow = progress > 0.1
+      ? `0 0 40px rgba(255, 45, 85, ${glowOpacity}), 0 0 80px rgba(255, 45, 85, ${glowOpacity * 0.5})`
+      : 'none';
+  }
+}
+
+// Combined scroll handler
+function onScroll() {
+  updateNav();
+  updateGlow();
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
 
 // ── Countdown ──
 const target = new Date('2026-03-23T00:00:00');
@@ -791,7 +893,6 @@ function openEnvelope() {
   letterOpen = true;
   envelope.classList.add('opened');
 
-  // After flap opens, show letter content
   setTimeout(() => {
     letterOverlay.classList.add('open');
     const lines = document.querySelectorAll('.letter-line, .letter-sign');
@@ -825,10 +926,9 @@ letterOverlay.addEventListener('click', (e) => {
 });
 
 // ── Kiss particles on tap/click ──
-const kisses = ['💋', '😘', '♥'];
+const kisses = ['\u{1F48B}', '\u{1F618}', '\u2665'];
 document.addEventListener('click', (e) => {
-  // Don't spawn on interactive elements
-  if (e.target.closest('button, .envelope, .hold-btn, canvas')) return;
+  if (e.target.closest('button, .envelope, .hold-btn, canvas, .side-nav')) return;
   for (let i = 0; i < 3; i++) {
     const k = document.createElement('span');
     k.className = 'kiss-particle';
@@ -849,26 +949,13 @@ if (!('ontouchstart' in window)) {
     lastTrail = now;
     const h = document.createElement('span');
     h.className = 'cursor-heart';
-    h.textContent = '♥';
+    h.textContent = '\u2665';
     h.style.left = e.clientX + 'px';
     h.style.top = e.clientY + 'px';
     h.style.color = `hsl(${340 + Math.random() * 30}, 80%, ${50 + Math.random() * 20}%)`;
     document.body.appendChild(h);
     h.addEventListener('animationend', () => h.remove());
   });
-}
-
-// ── Scroll-based glow on "miss u mommy" ──
-const bigText = document.querySelector('#s2 .big');
-if (bigText) {
-  const glowObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting && e.intersectionRatio > 0.6) {
-        bigText.classList.add('scroll-glow');
-      }
-    });
-  }, { threshold: [0, 0.3, 0.6, 1] });
-  glowObs.observe(bigText);
 }
 
 // ── Hold button with vibration ──
@@ -906,17 +993,15 @@ function initScratch() {
   scratchCanvas.height = wrap.offsetHeight;
   const ctx = scratchCtx;
 
-  // Draw the cover
   ctx.fillStyle = '#1a1a1a';
   ctx.fillRect(0, 0, scratchCanvas.width, scratchCanvas.height);
 
-  // Add subtle pattern
   ctx.fillStyle = '#222';
   ctx.font = '12px Inter';
   ctx.textAlign = 'center';
   for (let y = 20; y < scratchCanvas.height; y += 25) {
     for (let x = 30; x < scratchCanvas.width; x += 60) {
-      ctx.fillText('✦', x + (y % 50 ? 15 : 0), y);
+      ctx.fillText('\u2726', x + (y % 50 ? 15 : 0), y);
     }
   }
 
@@ -933,7 +1018,6 @@ function scratch(x, y) {
   scratchCtx.arc(x, y, radius, 0, Math.PI * 2);
   scratchCtx.fill();
 
-  // Check if enough is scratched
   const data = scratchCtx.getImageData(0, 0, scratchCanvas.width, scratchCanvas.height).data;
   let clear = 0;
   for (let i = 3; i < data.length; i += 4) {
@@ -959,11 +1043,9 @@ scratchCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); scratc
 scratchCanvas.addEventListener('touchend', () => scratching = false);
 scratchCanvas.addEventListener('touchmove', (e) => { e.preventDefault(); const p = getScratchPos(e); scratch(p.x, p.y); });
 
-// Init scratch on load
 window.addEventListener('load', () => {
   initScratch();
 });
-// Re-init on resize
 window.addEventListener('resize', () => {
   if (!scratchRevealed) initScratch();
 });
